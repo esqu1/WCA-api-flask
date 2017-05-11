@@ -13,6 +13,7 @@ COMP_KEYS = [
 def convert_to_dict(tup):
     return {key: value for (key, value) in zip(COMP_KEYS, tup)}
 
+
 def encode_utf8(fetch):
     new_list = []
     for el in fetch:
@@ -40,6 +41,7 @@ def get_all():
     cur.execute('SELECT * FROM Competitions')
     s = cur.fetchall()
     return encode_utf8(s)
+
 
 @app.route('/comps/<date>', methods=['GET'])
 def choose_from_date(date):
