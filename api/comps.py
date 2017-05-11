@@ -21,27 +21,9 @@ COMP_KEYS = [
 def convert_to_dict(tup):
     return {key: value for (key, value) in zip(COMP_KEYS, tup)}
 
-
-@app.route('/comps/<int:id>', methods=['GET'])
-def get_comp(id):
-    cur.execute('SELECT * FROM Competitions')
-    s = cur.fetchall()
-    data = s[id]
-    new_data = []
-    for el in data:
-        try:
-            new_data.append(str(unicode(el, 'latin-1').encode('utf8')))
-        except TypeError:
-            new_data.append(str(el))
-    return jsonify({'result': convert_to_dict(new_data)})
-
-
-@app.route('/comps', methods=['GET'])
-def get_all():
-    cur.execute('SELECT * FROM Competitions')
-    s = cur.fetchall()
+def encode_utf8(fetch):
     new_list = []
-    for el in s:
+    for el in fetch:
         data = el
         new_data = []
         for l in data:
@@ -51,3 +33,24 @@ def get_all():
                 new_data.append(str(l))
         new_list.append(convert_to_dict(new_data))
     return jsonify({'result': new_list})
+
+
+@app.route('/comps/<int:id>', methods=['GET'])
+def get_comp(id):
+    cur.execute('SELECT * FROM Competitions')
+    s = cur.fetchall()
+    data = [s[id]]
+    return encode_utf8(data)
+
+
+@app.route('/comps', methods=['GET'])
+def get_all():
+    cur.execute('SELECT * FROM Competitions')
+    s = cur.fetchall()
+    return encode_utf8(s)
+
+@app.route('/comps/<date>', methods=['GET'])
+def choose_from_date(date):
+    cur.execute("SELECT * FROM Competitions WHERE ABS(DATEDIFF('%s', CONCAT_WS('-', CONCAT(year), LPAD(CONCAT(endMonth),2,'0'), LPAD(CONCAT(day), 2, '0')))) < 5" % date)
+    s = cur.fetchall()
+    return encode_utf8(s)
