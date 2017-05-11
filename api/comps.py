@@ -1,14 +1,6 @@
 from flask import jsonify
-from api import app
-import os
-import MySQLdb
+from api import app, cur
 
-myConnection = MySQLdb.connect(
-    host=os.getenv('SQL_HOST'),
-    user=os.getenv('SQL_USERNAME'),
-    passwd=os.getenv('SQL_PASSWORD'),
-    db=os.getenv('SQL_WCA_DB'))
-cur = myConnection.cursor()
 
 COMP_KEYS = [
     'id', 'name', 'cityName', 'countryId', 'information', 'year', 'month',
