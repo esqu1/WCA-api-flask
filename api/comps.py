@@ -1,5 +1,4 @@
 from flask import jsonify
-import json
 from api import app
 import os
 import MySQLdb
