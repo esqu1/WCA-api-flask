@@ -2,7 +2,7 @@ from flask import jsonify
 from api import app, cur
 
 
-COMP_KEYS = [
+KEYS = [
     'id', 'name', 'cityName', 'countryId', 'information', 'year', 'month',
     'day', 'endMonth', 'endDay', 'eventSpecs', 'wcaDelegate', 'organiser',
     'venue', 'venueAddress', 'venueDetails', 'external_website', 'cellName',
@@ -11,7 +11,7 @@ COMP_KEYS = [
 
 
 def convert_to_dict(tup):
-    return {key: value for (key, value) in zip(COMP_KEYS, tup)}
+    return {key: value for (key, value) in zip(KEYS, tup)}
 
 
 def encode_utf8(fetch):
