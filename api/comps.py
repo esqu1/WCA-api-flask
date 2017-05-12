@@ -9,19 +9,7 @@ KEYS = [
     'latitude', 'longitude'
 ]
 
-
-def encode_utf8(fetch):
-    new_list = []
-    for el in fetch:
-        data = el
-        new_data = []
-        for l in data:
-            try:
-                new_data.append(str(unicode(l, 'latin-1').encode('utf8')))
-            except TypeError:
-                new_data.append(str(l))
-        new_list.append(convert_to_dict(new_data, KEYS))
-    return jsonify({'result': new_list})
+cur.execute("SET NAMES 'utf8'")
 
 
 @app.route('/comps/<int:id>', methods=['GET'])
@@ -29,18 +17,18 @@ def get_comp(id):
     cur.execute('SELECT * FROM Competitions')
     s = cur.fetchall()
     data = [s[id]]
-    return encode_utf8(data)
+    return jsonify({'result': [convert_to_dict(i, KEYS) for i in data]})
 
 
 @app.route('/comps', methods=['GET'])
 def get_all():
     cur.execute('SELECT * FROM Competitions')
     s = cur.fetchall()
-    return encode_utf8(s)
+    return jsonify({'result': [convert_to_dict(i, KEYS) for i in s]})
 
 
 @app.route('/comps/<date>', methods=['GET'])
 def choose_from_date(date):
     cur.execute("SELECT * FROM Competitions WHERE ABS(DATEDIFF('%s', CONCAT_WS('-', CONCAT(year), LPAD(CONCAT(endMonth),2,'0'), LPAD(CONCAT(day), 2, '0')))) < 5" % date)
     s = cur.fetchall()
-    return encode_utf8(s)
+    return jsonify({'result': [convert_to_dict(i, KEYS) for i in s]})
