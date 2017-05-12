@@ -1,6 +1,6 @@
 from flask import jsonify
 from api import app, cur
-
+from utils import convert_to_dict
 
 KEYS = [
     'id', 'name', 'cityName', 'countryId', 'information', 'year', 'month',
@@ -8,10 +8,6 @@ KEYS = [
     'venue', 'venueAddress', 'venueDetails', 'external_website', 'cellName',
     'latitude', 'longitude'
 ]
-
-
-def convert_to_dict(tup):
-    return {key: value for (key, value) in zip(KEYS, tup)}
 
 
 def encode_utf8(fetch):
@@ -24,7 +20,7 @@ def encode_utf8(fetch):
                 new_data.append(str(unicode(l, 'latin-1').encode('utf8')))
             except TypeError:
                 new_data.append(str(l))
-        new_list.append(convert_to_dict(new_data))
+        new_list.append(convert_to_dict(new_data, KEYS))
     return jsonify({'result': new_list})
 
 

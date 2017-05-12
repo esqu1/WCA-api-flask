@@ -15,6 +15,7 @@ cur = myConnection.cursor()
 
 import api.comps
 import api.pbs
+import api.events
 
 @app.route('/')
 def main():
