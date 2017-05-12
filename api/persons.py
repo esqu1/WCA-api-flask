@@ -17,3 +17,6 @@ def get_persons():
 @app.route('/persons/<wcaid>', methods=['GET'])
 def get_person_id(wcaid):
     cur.execute("SET NAMES 'utf8'")
+    cur.execute("SELECT * FROM Persons WHERE id = '%s'" % wcaid)
+    s = cur.fetchall()
+    return jsonify({'result': [convert_to_dict(i, KEYS) for i in s]})
